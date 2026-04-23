@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusFlow Pomodoro</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <h1>FocusFlow</h1>
+      <p>Stay focused, one session at a time.</p>
+    </header>
+
+    <section class="timer-card">
+      <p id="modeLabel" class="mode">Focus Mode</p>
+      <h2 id="timeDisplay" class="time">25:00</h2>
+      <div class="actions">
+        <button id="startBtn">Start</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="resetBtn">Reset</button>
+        <button id="switchBtn">Switch Mode</button>
+      </div>
+    </section>
+
+    <section class="tasks-card">
+      <h3>Tasks</h3>
+      <form id="taskForm" class="task-form">
+        <input id="taskInput" type="text" placeholder="Add a task..." maxlength="80" required>
+        <button type="submit">Add</button>
+      </form>
+      <ul id="taskList" class="task-list"></ul>
+      <p class="summary">Completed today: <span id="doneCount">0</span></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #1c2636;
+  --muted: #637188;
+  --primary: #1e6fd9;
+  --primary-dark: #1658ad;
+  --success: #1d9d61;
+  --border: #dbe2ef;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #eef3ff 0%, #f5f7fb 40%, #eef9f2 100%);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.app {
+  width: 100%;
+  max-width: 680px;
+  display: grid;
+  gap: 18px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.hero p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.timer-card,
+.tasks-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(10, 35, 80, 0.08);
+}
+
+.mode {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.time {
+  margin: 8px 0 14px;
+  font-size: 3rem;
+  letter-spacing: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+.task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fbfcff;
+}
+
+.task-item.done span {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.done-btn {
+  background: var(--success);
+}
+
+.summary {
+  margin-top: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .time {
+    font-size: 2.3rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+  }
+}
