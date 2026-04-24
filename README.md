@@ -8,6 +8,8 @@ FocusFlow is a lightweight single-page productivity app built with plain HTML, C
 - Start, pause, and reset controls
 - Task list with add and complete toggle
 - Daily completed-task counter
+- Saved tasks between browser sessions
+- Clear completed tasks in one click
 
 ## Run
 1. Open `index.html` in your browser.

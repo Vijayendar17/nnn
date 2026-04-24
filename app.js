@@ -11,11 +11,14 @@ const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 const doneCount = document.getElementById("doneCount");
+const clearDoneBtn = document.getElementById("clearDoneBtn");
 
 let isFocusMode = true;
 let secondsLeft = FOCUS_SECONDS;
 let intervalId = null;
-let completed = 0;
+let tasks = [];
+
+const STORAGE_KEY = "focusflow.tasks";
 
 function formatTime(totalSeconds) {
   const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -26,6 +29,22 @@ function formatTime(totalSeconds) {
 function renderTime() {
   timeDisplay.textContent = formatTime(secondsLeft);
   modeLabel.textContent = isFocusMode ? "Focus Mode" : "Break Mode";
+}
+
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  try {
+    tasks = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    tasks = [];
+  }
+}
+
+function updateDoneCount() {
+  doneCount.textContent = String(tasks.filter((task) => task.done).length);
 }
 
 function stopTimer() {
@@ -65,34 +84,58 @@ function switchMode() {
   resetTimer();
 }
 
-function addTask(text) {
-  const item = document.createElement("li");
-  item.className = "task-item";
+function renderTasks() {
+  taskList.replaceChildren();
 
-  const label = document.createElement("span");
-  label.textContent = text;
+  tasks.forEach((task) => {
+    const item = document.createElement("li");
+    item.className = "task-item";
 
-  const toggleBtn = document.createElement("button");
-  toggleBtn.className = "done-btn";
-  toggleBtn.textContent = "Done";
+    if (task.done) {
+      item.classList.add("done");
+    }
 
-  toggleBtn.addEventListener("click", () => {
-    const alreadyDone = item.classList.contains("done");
-    item.classList.toggle("done");
-    toggleBtn.textContent = alreadyDone ? "Done" : "Undo";
+    const label = document.createElement("span");
+    label.textContent = task.text;
 
-    completed += alreadyDone ? -1 : 1;
-    doneCount.textContent = String(completed);
+    const toggleBtn = document.createElement("button");
+    toggleBtn.className = "done-btn";
+    toggleBtn.textContent = task.done ? "Undo" : "Done";
+
+    toggleBtn.addEventListener("click", () => {
+      task.done = !task.done;
+      saveTasks();
+      renderTasks();
+    });
+
+    item.append(label, toggleBtn);
+    taskList.appendChild(item);
   });
 
-  item.append(label, toggleBtn);
-  taskList.appendChild(item);
+  updateDoneCount();
+}
+
+function addTask(text) {
+  tasks.push({
+    id: globalThis.crypto?.randomUUID?.() || String(Date.now()),
+    text,
+    done: false,
+  });
+  saveTasks();
+  renderTasks();
+}
+
+function clearCompletedTasks() {
+  tasks = tasks.filter((task) => !task.done);
+  saveTasks();
+  renderTasks();
 }
 
 startBtn.addEventListener("click", startTimer);
 pauseBtn.addEventListener("click", stopTimer);
 resetBtn.addEventListener("click", resetTimer);
 switchBtn.addEventListener("click", switchMode);
+clearDoneBtn.addEventListener("click", clearCompletedTasks);
 
 taskForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -106,4 +149,6 @@ taskForm.addEventListener("submit", (event) => {
   taskInput.value = "";
 });
 
+loadTasks();
 renderTime();
+renderTasks();
