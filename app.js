@@ -7,6 +7,8 @@ const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const resetBtn = document.getElementById("resetBtn");
 const switchBtn = document.getElementById("switchBtn");
+const progressBar = document.getElementById("progressBar");
+const sessionCount = document.getElementById("sessionCount");
 const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
@@ -17,8 +19,10 @@ let isFocusMode = true;
 let secondsLeft = FOCUS_SECONDS;
 let intervalId = null;
 let tasks = [];
+let completedFocusSessions = 0;
 
 const STORAGE_KEY = "focusflow.tasks";
+const SESSION_STORAGE_KEY = "focusflow.completedSessions";
 
 function formatTime(totalSeconds) {
   const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -29,6 +33,26 @@ function formatTime(totalSeconds) {
 function renderTime() {
   timeDisplay.textContent = formatTime(secondsLeft);
   modeLabel.textContent = isFocusMode ? "Focus Mode" : "Break Mode";
+  updateProgress();
+}
+
+function updateProgress() {
+  const totalSeconds = isFocusMode ? FOCUS_SECONDS : BREAK_SECONDS;
+  const elapsedSeconds = totalSeconds - secondsLeft;
+  const progress = Math.min(Math.max((elapsedSeconds / totalSeconds) * 100, 0), 100);
+  progressBar.style.width = `${progress}%`;
+}
+
+function saveSessionCount() {
+  localStorage.setItem(SESSION_STORAGE_KEY, String(completedFocusSessions));
+}
+
+function loadSessionCount() {
+  completedFocusSessions = Number(localStorage.getItem(SESSION_STORAGE_KEY)) || 0;
+}
+
+function renderSessionCount() {
+  sessionCount.textContent = String(completedFocusSessions);
 }
 
 function saveTasks() {
@@ -65,6 +89,11 @@ function startTimer() {
 
     if (secondsLeft <= 0) {
       stopTimer();
+      if (isFocusMode) {
+        completedFocusSessions += 1;
+        saveSessionCount();
+        renderSessionCount();
+      }
       alert(isFocusMode ? "Focus session complete. Take a break." : "Break complete. Back to focus.");
       isFocusMode = !isFocusMode;
       secondsLeft = isFocusMode ? FOCUS_SECONDS : BREAK_SECONDS;
@@ -150,5 +179,7 @@ taskForm.addEventListener("submit", (event) => {
 });
 
 loadTasks();
+loadSessionCount();
 renderTime();
+renderSessionCount();
 renderTasks();
