@@ -130,6 +130,7 @@ input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -143,6 +144,19 @@ input {
 
 .done-btn {
   background: var(--success);
+}
+
+.task-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.delete-btn {
+  background: #d83a3a;
+}
+
+.delete-btn:hover {
+  background: #b92f2f;
 }
 
 .summary {
@@ -179,6 +193,15 @@ input {
   }
 
   button {
+    width: 100%;
+  }
+
+  .task-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .task-controls {
     width: 100%;
   }
 }

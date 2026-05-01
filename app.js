@@ -131,13 +131,27 @@ function renderTasks() {
     toggleBtn.className = "done-btn";
     toggleBtn.textContent = task.done ? "Undo" : "Done";
 
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.textContent = "Delete";
+
     toggleBtn.addEventListener("click", () => {
       task.done = !task.done;
       saveTasks();
       renderTasks();
     });
 
-    item.append(label, toggleBtn);
+    deleteBtn.addEventListener("click", () => {
+      tasks = tasks.filter((itemTask) => itemTask.id !== task.id);
+      saveTasks();
+      renderTasks();
+    });
+
+    const controls = document.createElement("div");
+    controls.className = "task-controls";
+    controls.append(toggleBtn, deleteBtn);
+
+    item.append(label, controls);
     taskList.appendChild(item);
   });
 
